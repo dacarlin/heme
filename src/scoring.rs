@@ -24,7 +24,7 @@ pub fn score(pose: Vec<Atom>) -> f64 {
     // Right now, we are only scoring atoms
     //let mut total_energy: f64 = 0.0;
 
-    // electrostatics
+    // electrostatics and van der Waals
     let mut coulomb_score: f64 = 0.0;
     let mut lennard_jones: f64 = 0.0;
 
@@ -50,5 +50,24 @@ pub fn score(pose: Vec<Atom>) -> f64 {
         }
     }
 
-    coulomb_score + lennard_jones
+    // solvation
+    let mut solvation: f64 = 0.0;
+    for i in &pose {
+        let mut count_of_neighbors: f64 = 0.0;
+        // count number of neighbors
+        // penalize based on charge and number of neighbors
+        for j in &pose {
+            let r = i.dist(&j);
+            if r.max(6.0) == 6.0 {
+                // these atoms are greater than 6 Å apart
+            } else {
+                count_of_neighbors += 1.0;
+            }
+        }
+
+        solvation += count_of_neighbors * i.charge;
+    }
+
+    (0.5 * coulomb_score) + (1.0 * lennard_jones) + (0.6 * solvation)
+    // whoo, hard-coded weights!
 }

@@ -1,4 +1,8 @@
-// conformation: Atoms, Groups
+// Conformation (smaller to larger, Atom > Group > Pose)
+
+pub struct Pose {
+    pub atoms: Vec<Atom>,
+}
 
 pub struct Group {
     group: Vec<Atom>,

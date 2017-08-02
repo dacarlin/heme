@@ -6,18 +6,22 @@
 
 pub mod conformation;
 pub mod scoring;
+pub mod sampling;
 
 use std::fs::File;
 use std::error::Error;
 use std::io::prelude::*;
-use conformation::Atom;
+use conformation::{Atom, Group, Pose};
+use sampling::{Move, Protocol, get_protocol};
 use scoring::score;
 
 // File and protocol input and output
 // are in here, because we are shortly
-// going to be using a library for this
+// going to be using a nom parser for this
 
 pub struct Config {
+    // a Config objects holds the name of the protocol we want to run
+    // and the filename of the input PDB
     pub protocol: String,
     pub filename: String,
 }
@@ -36,80 +40,36 @@ impl Config {
 }
 
 pub fn parse_pdb(protocol: &str, contents: &str) -> Vec<Atom> {
-
     let mut results = Vec::new();
     for line in contents.lines() {
         if line.contains("ATOM") {
             results.push(line);
         }
     }
-
     let mut atoms = Vec::new();
     for result in results {
         let pkg = Atom::new(&result);
         atoms.push(pkg);
     }
-
     atoms
 }
 
 pub fn run(config: Config) -> Result<(), Box<Error>> {
+
+    // Construct a Pose object from the raw text
     let mut f = File::open(config.filename)?;
     let mut contents = String::new();
     f.read_to_string(&mut contents)?;
-
     let pose: Vec<Atom> = parse_pdb("ATOM", &contents);
+
+    // Apply a protocol to the Pose
     let protocol = get_protocol();
     let result = protocol.apply(pose);
 
+    // Print out the result
     println!("Total score: {}", result);
 
     Ok(())
-}
-
-// Conformation (smaller to larger, Atom > Group > Pose)
-
-pub struct Pose {
-    pub atoms: Vec<Atom>,
-}
-
-// Sampling (smaller to larger, Move > Protocol)
-
-pub struct Move {
-    pub name: String,
-}
-
-impl Move {
-    pub fn new() -> Move {
-
-        Move { name: String::from("This is a move") }
-    }
-    pub fn apply(&self, pose: Vec<Atom>) {
-        println!("Applied move!")
-    }
-}
-
-pub struct Protocol {
-    pub protocol: f64,
-    pub steps: Vec<Move>,
-}
-
-impl Protocol {
-    pub fn apply(&self, pose: Vec<Atom>) -> f64 {
-        // Right now, we hard code a protocol of score-only
-        // into this class, but eventually we will customize
-        // the protocols at run time
-        let total_score = score(pose);
-
-        total_score
-    }
-
-}
-
-pub fn get_protocol() -> Protocol {
-    let protocol: f64 = 1211.321;
-    let steps = vec![Move::new(), Move::new()];
-    Protocol { protocol, steps }
 }
 
 // Tests
