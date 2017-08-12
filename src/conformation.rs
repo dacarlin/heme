@@ -1,7 +1,16 @@
 // Conformation (smaller to larger, Atom > Group > Pose)
 
+use XYZ;
+
 pub struct Pose {
     pub atoms: Vec<Atom>,
+}
+
+impl Pose {
+    pub fn from_atoms(atoms: Vec<Atom>) -> Pose {
+
+        Pose { atoms }
+    }
 }
 
 pub struct Group {
@@ -13,9 +22,9 @@ pub struct Atom {
     pub y: f64,
     pub z: f64,
     pub charge: f64,
+    pub xyz: XYZ,
     // elem: String,
     // radius: f64,
-    // charge: f64,
 }
 
 // 0         1         2         3         4         5         6
@@ -33,7 +42,19 @@ impl Atom {
         let z: f64 = args[46..54].trim().parse().expect("Z not a number");
         let charge: f64 = -0.69;
         //println!("Creating atom with {}, {}, {}, charge {}", x, y, z, charge);
-        Atom { x, y, z, charge }
+        // Atom { x, y, z, charge, xyz: XYZ { x, y, z } }
+        let xyz = XYZ::new(x, y, z);
+        Atom { x, y, z, charge, xyz }
+    }
+
+    pub fn from_string(args: &str) -> Atom {
+        let x: f64 = args[30..38].trim().parse().expect("X not a number");
+        let y: f64 = args[38..46].trim().parse().expect("Y not a number");
+        let z: f64 = args[46..54].trim().parse().expect("Z not a number");
+        let charge: f64 = -0.69;
+        let xyz = XYZ::new(x, y, z);
+        //println!("Creating atom with {}, {}, {}, charge {}", x, y, z, charge);
+        Atom { x, y, z, charge, xyz }
     }
 
     pub fn dist(&self, other: &Atom) -> f64 {

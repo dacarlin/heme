@@ -18,9 +18,9 @@ Kinds of energies for residues:
 
 */
 
-use conformation::Atom;
+use conformation::{Atom, Pose};
 
-pub fn score(pose: Vec<Atom>) -> f64 {
+pub fn score(pose: &Pose) -> f64 {
     // Right now, we are only scoring atoms
     //let mut total_energy: f64 = 0.0;
 
@@ -28,8 +28,8 @@ pub fn score(pose: Vec<Atom>) -> f64 {
     let mut coulomb_score: f64 = 0.0;
     let mut lennard_jones: f64 = 0.0;
 
-    for i in &pose {
-        for j in &pose {
+    for i in &pose.atoms {
+        for j in &pose.atoms {
             let r: f64 = i.dist(j);
             if r == 0.0 {
                 // these are the same atom
@@ -52,11 +52,11 @@ pub fn score(pose: Vec<Atom>) -> f64 {
 
     // solvation
     let mut solvation: f64 = 0.0;
-    for i in &pose {
+    for i in &pose.atoms {
         let mut count_of_neighbors: f64 = 0.0;
         // count number of neighbors
         // penalize based on charge and number of neighbors
-        for j in &pose {
+        for j in &pose.atoms {
             let r = i.dist(&j);
             if r.max(6.0) == 6.0 {
                 // these atoms are greater than 6 Å apart

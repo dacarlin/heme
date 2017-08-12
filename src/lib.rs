@@ -39,18 +39,21 @@ impl Config {
     }
 }
 
-pub fn parse_pdb(protocol: &str, contents: &str) -> Vec<Atom> {
+pub fn parse_pdb(contents: &str) -> Vec<Atom> {
+
     let mut results = Vec::new();
     for line in contents.lines() {
         if line.contains("ATOM") {
             results.push(line);
         }
     }
+
     let mut atoms = Vec::new();
     for result in results {
         let pkg = Atom::new(&result);
         atoms.push(pkg);
     }
+
     atoms
 }
 
@@ -60,16 +63,32 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
     let mut f = File::open(config.filename)?;
     let mut contents = String::new();
     f.read_to_string(&mut contents)?;
-    let pose: Vec<Atom> = parse_pdb("ATOM", &contents);
+    // let pose: Vec<Atom> = parse_pdb(&contents);
+    let atoms = parse_pdb(&contents);
+    let pose = Pose::from_atoms(atoms);
 
     // Apply a protocol to the Pose
-    let protocol = get_protocol();
+    let protocol = get_protocol(&config.protocol);
     let result = protocol.apply(pose);
 
     // Print out the result
     println!("Total score: {}", result);
 
     Ok(())
+}
+
+#[derive(Debug)]
+pub struct XYZ {
+    x: f64,
+    y: f64,
+    z: f64,
+}
+
+
+impl XYZ {
+    pub fn new(x: f64, y: f64, z: f64) -> XYZ {
+        XYZ { x, y, z }
+    }
 }
 
 // Tests
@@ -79,16 +98,19 @@ mod test {
     use super::*;
 
     #[test]
-    fn one_result() {
-        let protocol = "duct";
-        let contents = "\
-Rust:
-safe, fast, productive.
-Pick three.";
-
-        assert_eq!(
-            vec!["safe, fast, productive."],
-            search(protocol, contents)
-        );
+    fn test_atom_from_string() {
+        let atom = Atom::new("ATOM      7  OD1 ASP A   1      27.457 -10.165  18.817  1.00  0.00           O");
+        let xyz = XYZ::new(27.457, -10.165, 18.817);
+        println!("{:?}", xyz)
     }
+
+    // #[test]
+    // fn one_result() {
+    //     let protocol = "duct";
+    //     let contents = "\Rust:\nsafe, fast, productive.\nPick three.";
+    //     assert_eq!(
+    //         vec!["safe, fast, productive."],
+    //         search(protocol, contents)
+    //     );
+    // }
 }
