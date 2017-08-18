@@ -4,6 +4,8 @@
 // will look for an existing PDB parser.
 // I promise. -- Alex (Sun, Jul 30 at 7:30 PM)
 
+extern crate daggy;
+
 pub mod conformation;
 pub mod scoring;
 pub mod sampling;
@@ -11,7 +13,7 @@ pub mod sampling;
 use std::fs::File;
 use std::error::Error;
 use std::io::prelude::*;
-use conformation::{Atom, Group, Pose};
+use conformation::{Atom, Pose};
 use sampling::{Move, Protocol, get_protocol};
 use scoring::score;
 
@@ -20,8 +22,7 @@ use scoring::score;
 // going to be using a nom parser for this
 
 pub struct Config {
-    // a Config objects holds the name of the protocol we want to run
-    // and the filename of the input PDB
+    // a Config objects holds the Rustetta config options
     pub protocol: String,
     pub filename: String,
 }
@@ -39,6 +40,49 @@ impl Config {
     }
 }
 
+
+// 0         1         2         3         4         5         6
+// 01234567890123456789012345678901234567890123456789012345678901234567890123456789
+// ATOM      1  N   ASP A   1      27.405  -7.086  18.389  1.00  0.00           N
+// ATOM      2  CA  ASP A   1      26.221  -7.728  18.989  1.00  0.00           C
+//                               ||||||||        ||||||||
+//                                       ||||||||
+//                               30..38  38..46  46..44
+
+pub struct Record {
+    // PDB atom record class
+
+    pub xyz: XYZ,
+    pub charge: f64,
+    pub element: String,
+    pub residue_index: i32,
+    pub residue_name: String,
+}
+
+impl Record {
+    pub fn new(args: &str) -> Record {
+
+        // coords
+        let x: f64 = args[30..38].trim().parse().expect("X not a number");
+        let y: f64 = args[38..46].trim().parse().expect("Y not a number");
+        let z: f64 = args[46..54].trim().parse().expect("Z not a number");
+        let xyz = XYZ::new(x, y, z);
+
+        // residue-level information
+        let residue_index: i32 = args[23..30].trim().parse().expect("Residue index not a number");
+        let residue_name = args[17..20].to_string(); //String::from(args[17..20]);
+
+        // charge and radius
+        let charge: f64 = -0.69; // actually look up
+        let element = args[11..17].trim().to_string();
+        // let charge = look_up_charge(atom_name); or something
+        //println!("Creating atom with {}, {}, {}, charge {}", x, y, z, charge);
+
+        Record { xyz, charge, element, residue_index, residue_name }
+    }
+}
+
+
 pub fn parse_pdb(contents: &str) -> Vec<Atom> {
 
     let mut results = Vec::new();
@@ -48,9 +92,18 @@ pub fn parse_pdb(contents: &str) -> Vec<Atom> {
         }
     }
 
-    let mut atoms = Vec::new();
+    let mut records = Vec::new();
     for result in results {
-        let pkg = Atom::new(&result);
+        let pkg = Record::new(&result);
+
+        // logic to decide what to do with this atom
+        records.push(pkg);
+    }
+
+    let mut atoms = Vec::new();
+    for record in records {
+        let pkg = Atom::new(record);
+
         atoms.push(pkg);
     }
 
@@ -59,20 +112,19 @@ pub fn parse_pdb(contents: &str) -> Vec<Atom> {
 
 pub fn run(config: Config) -> Result<(), Box<Error>> {
 
-    // Construct a Pose object from the raw text
+    // read input files from Config object
     let mut f = File::open(config.filename)?;
     let mut contents = String::new();
     f.read_to_string(&mut contents)?;
-    // let pose: Vec<Atom> = parse_pdb(&contents);
+
+    // create pose object by parsing the PDB
     let atoms = parse_pdb(&contents);
     let pose = Pose::from_atoms(atoms);
 
     // Apply a protocol to the Pose
     let protocol = get_protocol(&config.protocol);
-    let result = protocol.apply(pose);
-
-    // Print out the result
-    println!("Total score: {}", result);
+    let total_score = protocol.apply(pose);
+    println!("Total score: {}", total_score);
 
     Ok(())
 }
@@ -89,28 +141,4 @@ impl XYZ {
     pub fn new(x: f64, y: f64, z: f64) -> XYZ {
         XYZ { x, y, z }
     }
-}
-
-// Tests
-
-#[cfg(test)]
-mod test {
-    use super::*;
-
-    #[test]
-    fn test_atom_from_string() {
-        let atom = Atom::new("ATOM      7  OD1 ASP A   1      27.457 -10.165  18.817  1.00  0.00           O");
-        let xyz = XYZ::new(27.457, -10.165, 18.817);
-        println!("{:?}", xyz)
-    }
-
-    // #[test]
-    // fn one_result() {
-    //     let protocol = "duct";
-    //     let contents = "\Rust:\nsafe, fast, productive.\nPick three.";
-    //     assert_eq!(
-    //         vec!["safe, fast, productive."],
-    //         search(protocol, contents)
-    //     );
-    // }
 }
