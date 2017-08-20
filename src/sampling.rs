@@ -1,7 +1,7 @@
 // Sampling (smaller to larger, Move > Protocol)
 
 use scoring::score;
-use conformation::{Atom, Pose};
+use conformation::Pose;
 
 pub struct Move {
     pub name: String,

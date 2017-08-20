@@ -3,7 +3,7 @@ extern crate trust;
 use std::env;
 use std::process;
 
-use trust::Config;
+use trust::io::Config;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -15,7 +15,7 @@ fn main() {
     println!("Running protocol: {}", config.protocol);
     println!("Input file name: {}", config.filename);
 
-    if let Err(e) = trust::run(config) {
+    if let Err(e) = trust::io::run(config) {
         println!("Application error: {}", e);
         process::exit(1);
     }

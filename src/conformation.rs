@@ -1,7 +1,30 @@
 // Conformation (smaller to larger, Atom > Residue > Pose)
 
-use XYZ;
 use Record;
+
+#[derive(Debug)]
+pub struct XYZ {
+    pub x: f64,
+    pub y: f64,
+    pub z: f64,
+
+    // add the Add trait!
+}
+
+
+impl XYZ {
+    pub fn new(x: f64, y: f64, z: f64) -> XYZ {
+        XYZ { x, y, z }
+    }
+
+    pub fn translate(&self, other: &XYZ) {
+        //
+    }
+
+    pub fn rotate(&self, other: &XYZ) {
+        //
+    }
+}
 
 pub struct Pose {
     // container to hold conformation, energy, and methods for
@@ -24,23 +47,15 @@ pub struct Residue {
 }
 
 pub struct Atom {
-    // pub residue_name: String,
-    // pub residue_index: i32,
-    // pub x: f64,
-    // pub y: f64,
-    // pub z: f64,
     pub charge: f64,
     pub xyz: XYZ,
     pub element: String,
-    // elem: String,
-    // radius: f64,
 }
 
 
 impl Atom {
-    pub fn new(record: Record) -> Atom {
-
-        Atom { xyz: record.xyz, charge: record.charge, element: record.element }
+    pub fn new(r: Record) -> Atom {
+        Atom { xyz: r.xyz, charge: r.charge, element: r.element }
     }
 
     pub fn dist(&self, other: &Atom) -> f64 {

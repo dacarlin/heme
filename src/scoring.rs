@@ -20,6 +20,28 @@ Kinds of energies for residues:
 
 use conformation::{Atom, Pose};
 
+pub struct ScoreType {
+    pub cutoff: i32,
+    pub name: String,
+    // evaluation_function: T,
+}
+
+impl ScoreType {
+    pub fn from_name(name: &str) -> ScoreType {
+        let name = String::from("lj");
+        let cutoff = 6;
+
+        ScoreType { cutoff, name }
+    }
+
+    pub fn score_atoms(atom1: &Atom, atom2: &Atom) -> f64 {
+        // score a pair of atoms and return the total score
+
+        55.5
+    }
+}
+
+
 pub fn score(pose: &Pose) -> f64 {
     // Right now, we are only scoring atoms
     //let mut total_energy: f64 = 0.0;
@@ -34,14 +56,14 @@ pub fn score(pose: &Pose) -> f64 {
             if r == 0.0 {
                 // these are the same atom
                 // do nothing
-            } else if r.max(12.0) == 12.0 {
+            } else if r.max(6.0) == 6.0 {
                 // these atoms are greater than 12 Å apart
                 // ignore that they interact
             } else {
                 let epsilon: f64 = 1.0;
-                let C: f64 = 1.0;
+                let c: f64 = 1.0;
                 let cou = i.charge * j.charge / r.powi(2);
-                coulomb_score += C * cou;
+                coulomb_score += c * cou;
 
                 let rm: f64 = 1.0; // minimum distance is actually going to depend on both atoms' radii
                 let lj = (rm/r).powi(12) - 2.0 * (rm/r).powi(6);
