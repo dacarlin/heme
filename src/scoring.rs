@@ -42,13 +42,34 @@ impl ScoreType {
 }
 
 
+
 pub fn score(pose: &Pose) -> f64 {
+
+    let mut total_score: f64 = 0.0;
     // Right now, we are only scoring atoms
     //let mut total_energy: f64 = 0.0;
 
     // electrostatics and van der Waals
     let mut coulomb_score: f64 = 0.0;
     let mut lennard_jones: f64 = 0.0;
+
+    // calculate Lennard-Jones energy
+    // from two atoms and the distance between them
+    // which has already been computed
+    pub fn calculate_lennard_jones_energy(a1: &Atom, a2: &Atom, r: f64) -> f64 {
+
+        let r_m = 1.0; // sum of both radii
+        let epsilon = 1.0;
+
+        epsilon * ((r_m/r).powi(12) - 2.0 * (r_m/r).powi(6))
+    }
+
+    pub fn calculate_coulomb_energy(a1: &Atom, a2: &Atom, r: f64) -> f64 {
+
+        let c = 1.0;
+
+        c * a1.charge * a2.charge / r.powi(2)
+    }
 
     for i in &pose.atoms {
         for j in &pose.atoms {
@@ -60,14 +81,8 @@ pub fn score(pose: &Pose) -> f64 {
                 // these atoms are greater than 12 Å apart
                 // ignore that they interact
             } else {
-                let epsilon: f64 = 1.0;
-                let c: f64 = 1.0;
-                let cou = i.charge * j.charge / r.powi(2);
-                coulomb_score += c * cou;
-
-                let rm: f64 = 1.0; // minimum distance is actually going to depend on both atoms' radii
-                let lj = (rm/r).powi(12) - 2.0 * (rm/r).powi(6);
-                lennard_jones += epsilon * lj;
+                total_score += calculate_lennard_jones_energy(i, j, r);
+                total_score += calculate_coulomb_energy(i, j, r);
             }
         }
     }

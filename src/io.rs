@@ -1,9 +1,3 @@
-// This time, and this one time *only*
-// we are going to implement a PDB parser.
-// Literally as soon as we have Internet, we
-// will look for an existing PDB parser.
-// I promise. -- Alex (Sun, Jul 30 at 7:30 PM)
-
 // File and protocol input and output
 
 use conformation::{XYZ, Atom, Pose};
@@ -14,7 +8,7 @@ use std::error::Error;
 use std::io::prelude::*;
 
 pub struct Config {
-    // a Config objects holds the Rustetta config options
+    // a Config objects holds the  config options
     pub protocol: String,
     pub filename: String,
 }
@@ -33,6 +27,12 @@ impl Config {
 }
 
 // PDB parsing
+
+// This time, and this one time *only*
+// we are going to implement a PDB parser.
+// Literally as soon as we have Internet, we
+// will look for an existing PDB parser.
+// I promise. -- Alex (Sun, Jul 30 at 7:30 PM)
 
 // 0         1         2         3         4         5         6
 // 01234567890123456789012345678901234567890123456789012345678901234567890123456789
@@ -77,35 +77,16 @@ impl Record {
 
 
 pub fn parse_pdb(contents: &str) -> Vec<Atom> {
-
-    let mut results = Vec::new();
-    for line in contents.lines() {
-        if line.starts_with("ATOM") {
-            results.push(line);
-        }
-    }
-
-    let mut records = Vec::new();
-    for result in results {
-        let pkg = Record::new(&result);
-
-        // logic to decide what to do with this atom
-        records.push(pkg);
-    }
+    // Parse a PDB file
 
     let mut atoms = Vec::new();
-    let mut residue_names = Vec::new();
-    for record in records {
-        let jeff = record.residue_index.clone();
-        residue_names.push(jeff);
-        let pkg = Atom::new(record);
-        // note: this destroys the record
-        atoms.push(pkg);
-    }
-
-    residue_names.dedup();
-    for residue_name in residue_names {
-        println!("Residue name: {}", residue_name);
+    // let mut residues = Vec::new();
+    for line in contents.lines() {
+        if line.starts_with("ATOM") {
+            let record = Record::new(&line);
+            let atom = Atom::new(&record);
+            atoms.push(atom);
+        }
     }
 
     atoms
@@ -120,12 +101,82 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
 
     // create pose object by parsing the PDB
     let atoms = parse_pdb(&contents);
-    let pose = Pose::from_atoms(atoms);
+    let mut pose = Pose::from_atoms(atoms);
 
     // Apply a protocol to the Pose
     let protocol = get_protocol(&config.protocol);
-    let total_score = protocol.apply(pose);
-    println!("Total score: {}", total_score);
+    protocol.run(&mut pose);
+
+    // println!("Total score: {}", total_score);
 
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_new_atoms_testy() {
+        let record = Record::new("ATOM      8  OD2 ASP A   1      28.042 -10.262  20.858  1.00  0.00           O ");
+        let atom = Atom::new(&record);
+        assert_eq!(atom.xyz.x, 28.042);
+    }
+
+    #[test]
+    fn test_pdb_parsing() {
+        let contents = "ATOM      1  N   ASP A   1      27.405  -7.086  18.389  1.00  0.00           N
+ATOM      2  CA  ASP A   1      26.221  -7.728  18.989  1.00  0.00           C
+ATOM      3  C   ASP A   1      25.150  -6.679  19.328  1.00  0.00           C
+ATOM      4  O   ASP A   1      24.099  -6.710  18.722  1.00  0.00           O
+ATOM      5  CB  ASP A   1      26.607  -8.504  20.250  1.00  0.00           C
+ATOM      6  CG  ASP A   1      27.438  -9.745  19.951  1.00  0.00           C
+ATOM      7  OD1 ASP A   1      27.457 -10.165  18.817  1.00  0.00           O
+ATOM      8  OD2 ASP A   1      28.042 -10.262  20.858  1.00  0.00           O
+ATOM      9 1H   ASP A   1      28.091  -7.781  18.175  1.00  0.00           H
+ATOM     10 2H   ASP A   1      27.138  -6.611  17.550  1.00  0.00           H
+";
+        let atoms = parse_pdb(&contents);
+        let pose = Pose::from_atoms(atoms);
+
+        assert_eq!(pose.atoms.len(), 10);
+
+    }
+
+    // #[test]
+    // fn test_score_type() {
+    //     let score_type = ScoreType::from_name("lj");
+    //     assert_eq!(score_type.cutoff, 6);
+    // }
+
+    #[test]
+    fn test_entropy_function() {
+
+        // entropy function
+        fn H(l: &f64) -> f64 {
+
+            // bounds of N choose lN
+            // can be found by 2^(n*H(l))
+            // where H is this function
+
+            // 0 < l < 0
+
+            let value = 1.0 - l;
+
+            l.ln() - value * value.ln()
+        }
+
+        let test_float: f64 = 18.11;
+        let answer: f64 = H(&test_float);
+        println!(">>> {}", answer);
+
+        assert_eq!(4, 4);
+    }
+
+    #[test]
+    fn test_lennard_jones_atom_loading() {
+
+
+    }
+
 }

@@ -1,6 +1,6 @@
 // Conformation (smaller to larger, Atom > Residue > Pose)
 
-use Record;
+use io::Record;
 
 #[derive(Debug)]
 pub struct XYZ {
@@ -17,12 +17,12 @@ impl XYZ {
         XYZ { x, y, z }
     }
 
-    pub fn translate(&self, other: &XYZ) {
-        //
-    }
+    pub fn clone(&self) -> XYZ {
+        let x = self.x.clone();
+        let y = self.y.clone();
+        let z = self.z.clone();
 
-    pub fn rotate(&self, other: &XYZ) {
-        //
+        XYZ { x, y, z }
     }
 }
 
@@ -52,10 +52,15 @@ pub struct Atom {
     pub element: String,
 }
 
-
 impl Atom {
-    pub fn new(r: Record) -> Atom {
-        Atom { xyz: r.xyz, charge: r.charge, element: r.element }
+    pub fn new(record: &Record) -> Atom {
+        // let xyz = record.xyz.clone();
+        let xyz = record.xyz.clone();
+        let charge = record.charge.clone();
+        let element = record.element.clone();
+        // Atom { xyz: r.xyz, charge: r.charge, element: r.element }
+
+        Atom { xyz, charge, element }
     }
 
     pub fn dist(&self, other: &Atom) -> f64 {
