@@ -54,11 +54,10 @@ pub struct Atom {
 
 impl Atom {
     pub fn new(record: &Record) -> Atom {
-        // let xyz = record.xyz.clone();
         let xyz = record.xyz.clone();
         let charge = record.charge.clone();
         let element = record.element.clone();
-        // Atom { xyz: r.xyz, charge: r.charge, element: r.element }
+        // we will probably do some more construction at some point
 
         Atom { xyz, charge, element }
     }
@@ -68,4 +67,15 @@ impl Atom {
          (self.xyz.y - other.xyz.y).powi(2) +
          (self.xyz.z - other.xyz.z).powi(2)).sqrt()
     }
+
+    /*
+
+    pub fn polarize(&self, other: &mut Atom, magnitude: f64) {
+        // let total_charge: f64 = self.charge + other.charge;
+        self.charge += magnitude;
+        other.charge -= magnitude;
+    }
+
+    */
+
 }

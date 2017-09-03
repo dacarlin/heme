@@ -1,14 +1,6 @@
 [root]
 name = "trust"
-version = "0.1.0"
-dependencies = [
- "daggy 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "daggy"
-version = "0.5.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+version = "0.2.0"
 dependencies = [
  "petgraph 0.4.5 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
@@ -19,14 +11,20 @@ version = "0.1.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
+name = "ordermap"
+version = "0.2.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
 name = "petgraph"
 version = "0.4.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "fixedbitset 0.1.7 (registry+https://github.com/rust-lang/crates.io-index)",
+ "ordermap 0.2.11 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [metadata]
-"checksum daggy 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)" = "9293a0da7d1bc1f30090ece4d9f9de79a07be7302ddb00e5eb1fefb6ee6409e2"
 "checksum fixedbitset 0.1.7 (registry+https://github.com/rust-lang/crates.io-index)" = "b0cb3d75726fa0c5ed3dce5dfcf0796affa2a60b33967f45012d86fb95a886f2"
+"checksum ordermap 0.2.11 (registry+https://github.com/rust-lang/crates.io-index)" = "d0e2df2a1933286f9d5f370ce42c3056a426845c5491b42ebcab900715bf2c5e"
 "checksum petgraph 0.4.5 (registry+https://github.com/rust-lang/crates.io-index)" = "14c6ae5ccb73b438781abc93d35615019b1ad6e24b44116377fb819cfd7587de"

@@ -1,5 +1,5 @@
-element,naive_charge
-C,-0.0001
-O,-0.66
-N,+0.33
-H,0.0001
+element,naive_charge,lennard_jones_radius
+C,-0.0001,2
+O,-0.66,1.5
+N,+0.33,1.8
+H,0.0001,1
