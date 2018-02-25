@@ -1,7 +1,7 @@
 [package]
 name = "trust"
 version = "0.2.0"
-authors = ["Alex Carlin <carlin@ucdavis.edu>"]
+authors = ["Alex Carlin <alxcarln@gmail.com>"]
 
 [dependencies]
-petgraph = "*" 
+petgraph = "*"

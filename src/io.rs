@@ -1,4 +1,5 @@
-// File and protocol input and output
+// File input and output
+// WARNING: contains hand-rolled PDB parser
 
 use conformation::{XYZ, Atom, Pose};
 use sampling::get_protocol;
@@ -32,7 +33,7 @@ impl Config {
 // we are going to implement a PDB parser.
 // Literally as soon as we have Internet, we
 // will look for an existing PDB parser.
-// I promise. -- Alex (Sun, Jul 30 at 7:30 PM)
+// I promise. -- Alex (Jul 30, 2017 at 7:30 PM)
 
 // 0         1         2         3         4         5         6
 // 01234567890123456789012345678901234567890123456789012345678901234567890123456789
@@ -44,6 +45,8 @@ impl Config {
 
 pub struct Record {
     // PDB atom record class
+    // and this is the only struct
+    // we're gonna make
 
     pub xyz: XYZ,
     pub charge: f64,
@@ -74,7 +77,6 @@ impl Record {
         Record { xyz, charge, element, residue_index, residue_name }
     }
 }
-
 
 pub fn parse_pdb(contents: &str) -> Vec<Atom> {
     // Parse a PDB file
@@ -143,12 +145,6 @@ ATOM     10 2H   ASP A   1      27.138  -6.611  17.550  1.00  0.00           H
 
     }
 
-    // #[test]
-    // fn test_score_type() {
-    //     let score_type = ScoreType::from_name("lj");
-    //     assert_eq!(score_type.cutoff, 6);
-    // }
-
     #[test]
     fn test_entropy_function() {
 
@@ -162,7 +158,6 @@ ATOM     10 2H   ASP A   1      27.138  -6.611  17.550  1.00  0.00           H
             // 0 < l < 0
 
             let value = 1.0 - l;
-
             l.ln() - value * value.ln()
         }
 
@@ -170,7 +165,7 @@ ATOM     10 2H   ASP A   1      27.138  -6.611  17.550  1.00  0.00           H
         let answer: f64 = H(&test_float);
         println!(">>> {}", answer);
 
-        assert_eq!(4, 4);
+        // assert_eq!(4, 4);
     }
 
     #[test]

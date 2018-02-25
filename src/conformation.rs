@@ -11,7 +11,17 @@ pub struct XYZ {
     // add the Add trait!
 }
 
-
+/// Holds Cartesian coordinates
+///
+/// # Example
+///
+/// ```
+/// //use conformation::XYZ; 
+///
+/// //let xyz = XYZ::new(0.123, 0.234, 0.345); 
+///
+/// //assert_eq!(0.123, xyz.x); 
+/// ```
 impl XYZ {
     pub fn new(x: f64, y: f64, z: f64) -> XYZ {
         XYZ { x, y, z }
@@ -26,10 +36,8 @@ impl XYZ {
     }
 }
 
+/// Holds a protein 
 pub struct Pose {
-    // container to hold conformation, energy, and methods for
-    // operating on a macromolecular structure
-
     pub atoms: Vec<Atom>,
 }
 
