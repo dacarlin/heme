@@ -1,9 +1,21 @@
+use std::collections::HashMap; 
+
 use scoring::score;
 use conformation::Pose;
 
 // Sampling (smaller to larger, Move > Protocol)
 
-// available_protocols?
+// Available_protocols
+//
+//
+//
+//
+//
+
+
+let mut protocols = HashMap::new(); 
+
+protocols.insert(String::from("score"), Protocol { components: vec![Box::new(ScoreOnlyMove {})] }) 
 
 pub fn get_protocol(protocol_name: &str) -> Protocol {
     // this can get a protocol from a dict of protocols defined in
@@ -61,9 +73,17 @@ impl Move for GridMove {
         // this will be like the Submaranian paper
         // we will evaluate hydro and electrostatic terms on each grid point
         // this makes it sequence-independent (and structure-independent)
-        // just like our PLOS paper 
+        // just like our PLOS paper
 
-        println!("GridMove: activating grid")
+        println!("GridMove: activating grid"); 
+
+        let grid = vec!(f64);  
+
+        for atom in pose.atoms() {
+            println!(atom.xyz()); 
+        }
+
+
 
     }
 }
