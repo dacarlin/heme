@@ -1,4 +1,4 @@
-extern crate trust;
+extern crate heme;
 
 use std::env;
 use std::process;

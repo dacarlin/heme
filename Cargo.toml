@@ -1,4 +1,4 @@
 [package]
-name = "trust"
-version = "0.2.0"
-authors = ["Alex Carlin <alxcarln@gmail.com>"]
+name = "heme"
+version = "0.0.1"
+authors = ["Alex Carlin <alex@inkisbetter.com>"]

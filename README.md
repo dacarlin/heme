@@ -1,17 +1,7 @@
-# Heme is a molecular modeling toolkit 
+# Molecular modeling with Heme  
 
-`heme` reads molecular structures from the command line and generates features. 
-*Heme* is compatible with a variety of scoring functions. *Heme* includes a molecular 
-mechanics force field implemented in Rust. *Heme* can be used to model protein 
-structures using full-atom scoring functions and output features useful for 
-machine learning 
-
-## IO
-
-Input file types: PDB. Output file types: text.
-
-Run with `heme {protocol_name} {input_file}`. Output is printed to standard out.
-
-## Benchmark
-
-Data set: . Benchmark protocol: .
+Heme is an implementation of force-field based molecular modeling 
+in the Rust language. It's a work in progress that's helping me 
+learn Rust. I hope that it will eventually be useful, but right now
+it's not. (For good implementations of force-field based molecular
+modeling, see FoldX or Lumol.)
