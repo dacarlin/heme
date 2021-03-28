@@ -2,3 +2,5 @@
 name = "heme"
 version = "0.3.2"
 authors = ["Alex Carlin <alxcarln@gmail.com>"]
+description = "PDB reader and other protein modeling tools" 
+license = "MIT"
