@@ -1,14 +1,12 @@
 // Conformation (smaller to larger, Atom > Residue > Pose)
 
+use std::fmt; 
 use io::Record;
 
-#[derive(Debug)]
 pub struct XYZ {
     pub x: f64,
     pub y: f64,
     pub z: f64,
-
-    // add the Add trait!
 }
 
 /// Holds Cartesian coordinates
@@ -36,6 +34,13 @@ impl XYZ {
     }
 }
 
+impl fmt::Display for XYZ {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+
+        write!(f, "{} {} {}", self.x, self.y, self.z)
+    }
+}
+
 /// Holds a protein 
 pub struct Pose {
     pub atoms: Vec<Atom>,
@@ -58,6 +63,13 @@ pub struct Atom {
     pub charge: f64,
     pub xyz: XYZ,
     pub element: String,
+}
+
+impl fmt::Display for Atom {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+
+        write!(f, "xyz={} elem={}", self.xyz, self.element)
+    }
 }
 
 impl Atom {
