@@ -1,21 +1,5 @@
-use std::collections::HashMap; 
-
 use scoring::score;
 use conformation::Pose;
-
-// Sampling (smaller to larger, Move > Protocol)
-
-// Available_protocols
-//
-//
-//
-//
-//
-
-
-let mut protocols = HashMap::new(); 
-
-protocols.insert(String::from("score"), Protocol { components: vec![Box::new(ScoreOnlyMove {})] }) 
 
 pub fn get_protocol(protocol_name: &str) -> Protocol {
     // this can get a protocol from a dict of protocols defined in
@@ -32,7 +16,6 @@ pub fn get_protocol(protocol_name: &str) -> Protocol {
     protocol
 }
 
-// protocol object
 pub struct Protocol {
     pub components: Vec<Box<Move>>,
 }
@@ -45,12 +28,11 @@ impl Protocol {
     }
 }
 
-// mover trait
 pub trait Move {
     fn apply(&self, pose: &mut Pose);
 }
 
-// list of movers
+// Manifest: available movers 
 pub struct ScoreOnlyMove {}
 pub struct GridMove {}
 
@@ -77,11 +59,9 @@ impl Move for GridMove {
 
         println!("GridMove: activating grid"); 
 
-        let grid = vec!(f64);  
-
-        for atom in pose.atoms() {
-            println!(atom.xyz()); 
-        }
+        //for atom in pose.atoms {
+        //    println!(atom.xyz()); 
+        //}
 
 
 
