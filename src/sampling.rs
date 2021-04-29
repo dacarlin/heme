@@ -7,9 +7,10 @@ pub fn get_protocol(protocol_name: &str) -> Protocol {
     let protocol = Protocol {
         components: vec![
             // go ahread, try it, it's fun!
-            Box::new(ScoreOnlyMove {}),
-            Box::new(GridMove {}),
-            Box::new(ScoreOnlyMove {}),
+            //Box::new(ScoreOnlyMove {}),
+            //Box::new(GridMove {}),
+            //Box::new(ScoreOnlyMove {}),
+            Box::new(DescribeMove {}), 
         ]
     };
 
@@ -35,6 +36,7 @@ pub trait Move {
 // Manifest: available movers 
 pub struct ScoreOnlyMove {}
 pub struct GridMove {}
+pub struct DescribeMove {} 
 
 // implementations for movers
 impl Move for ScoreOnlyMove {
@@ -43,6 +45,19 @@ impl Move for ScoreOnlyMove {
 
         let result: f64 = score(pose);
         println!("ScoreOnlyMove: result is {}", result);
+    }
+}
+
+impl Move for DescribeMove {
+    fn apply(&self, pose: &mut Pose) {
+
+        // Print out all the atoms in the pose 
+        for atom in &pose.atoms {
+            println!("Atom: {}", atom); 
+        }
+
+        // Print out the sequence 
+        println!("Sequence: {}", pose.sequence()); 
     }
 }
 

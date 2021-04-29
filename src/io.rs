@@ -51,8 +51,8 @@ pub struct Record {
     pub xyz: XYZ,
     pub charge: f64,
     pub element: String,
-    pub residue_index: i32,
-    pub residue_name: String,
+    pub residue_index: usize,
+    pub residue_name: String, 
 }
 
 impl Record {
@@ -65,8 +65,8 @@ impl Record {
         let xyz = XYZ::new(x, y, z);
 
         // residue-level information
-        let residue_index: i32 = args[23..30].trim().parse().expect("Residue index not a number");
-        let residue_name = args[17..20].to_string(); //String::from(args[17..20]);
+        let residue_index: usize = args[23..30].trim().parse().expect("Residue index not a number");
+        let residue_name = args[17..20].trim().to_string(); 
 
         // charge and radius
         let charge: f64 = -0.69; // actually look up
