@@ -119,14 +119,14 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_new_atoms_testy() {
+    fn test_new_record_from_str() {
         let record = Record::new("ATOM      8  OD2 ASP A   1      28.042 -10.262  20.858  1.00  0.00           O ");
         let atom = Atom::new(&record);
         assert_eq!(atom.xyz.x, 28.042);
     }
 
     #[test]
-    fn test_pdb_parsing() {
+    fn test_pdb_parsing_single_residue() {
         let contents = "ATOM      1  N   ASP A   1      27.405  -7.086  18.389  1.00  0.00           N
 ATOM      2  CA  ASP A   1      26.221  -7.728  18.989  1.00  0.00           C
 ATOM      3  C   ASP A   1      25.150  -6.679  19.328  1.00  0.00           C
