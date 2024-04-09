@@ -1,23 +1,42 @@
-use scoring::score;
+use transforms::{score, pdb_info, featurize};
 use conformation::Pose;
 
 pub fn get_protocol(protocol_name: &str) -> Protocol {
     // this can get a protocol from a dict of protocols defined in
     // protocols.rs. But, for now, we hard-code a protocol in
-    let protocol = Protocol {
-        components: vec![
-            // go ahread, try it, it's fun!
-            Box::new(ScoreOnlyMove {}),
-            Box::new(GridMove {}),
-            Box::new(ScoreOnlyMove {}),
-        ]
-    };
+
+    println!("running protocol {}", protocol_name); 
+
+    let protocol: Protocol = match protocol_name {
+        "score" => Protocol {
+            components: vec![
+                // go ahread, try it, it's fun!
+                Box::new(ScoreOnlyTransform {}),
+                Box::new(ScoreOnlyTransform {}),
+            ]
+        },
+        "featurize" => Protocol {
+            components: vec![
+                // go ahread, try it, it's fun!
+                
+                Box::new(PDBInfoTransform {}),
+                Box::new(FeaturizeTransform {}),
+                
+            ]
+        },
+        _ => Protocol {
+            components: vec![
+                
+                Box::new(PDBInfoTransform {}), 
+            ]
+        }
+    }; 
 
     protocol
 }
 
 pub struct Protocol {
-    pub components: Vec<Box<Move>>,
+    pub components: Vec<Box<dyn Transform>>,
 }
 
 impl Protocol {
@@ -28,42 +47,37 @@ impl Protocol {
     }
 }
 
-pub trait Move {
+pub trait Transform {
     fn apply(&self, pose: &mut Pose);
 }
 
-// Manifest: available movers 
-pub struct ScoreOnlyMove {}
-pub struct GridMove {}
+// Manifest: available Transformrs 
+pub struct ScoreOnlyTransform {}
+pub struct PDBInfoTransform {}
+pub struct FeaturizeTransform {} 
 
-// implementations for movers
-impl Move for ScoreOnlyMove {
+// implementations for Transformrs
+impl Transform for ScoreOnlyTransform {
     fn apply(&self, pose: &mut Pose) {
         // code to run when applying
 
         let result: f64 = score(pose);
-        println!("ScoreOnlyMove: result is {}", result);
+        println!("ScoreOnlyTransform: result is {}", result);
     }
 }
 
-impl Move for GridMove {
+impl Transform for PDBInfoTransform {
     fn apply(&self, pose: &mut Pose) {
-        // get extents of the active site
-        // or can read in from a argument the 6 XYZ objects at the corners
+        let result: String = pdb_info(pose); 
 
-        // construct the grid
-        // this will be like the Submaranian paper
-        // we will evaluate hydro and electrostatic terms on each grid point
-        // this makes it sequence-independent (and structure-independent)
-        // just like our PLOS paper
+        println!("{}", result)
+    }
+}
 
-        println!("GridMove: activating grid"); 
+impl Transform for FeaturizeTransform {
+    fn apply(&self, pose: &mut Pose) {
+        let result: String = featurize(pose); 
 
-        //for atom in pose.atoms {
-        //    println!(atom.xyz()); 
-        //}
-
-
-
+        println!("{}", result)
     }
 }

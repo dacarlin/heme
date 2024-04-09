@@ -94,7 +94,7 @@ pub fn parse_pdb(contents: &str) -> Vec<Atom> {
     atoms
 }
 
-pub fn run(config: Config) -> Result<(), Box<Error>> {
+pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
 
     // read input files from Config object
     let mut f = File::open(config.filename)?;

@@ -54,10 +54,13 @@ pub struct Residue {
     residue_index: i32,
 }
 
+#[derive(Debug)]
 pub struct Atom {
     pub charge: f64,
     pub xyz: XYZ,
     pub element: String,
+    pub residue_index: i32, 
+    pub residue_name: String, 
 }
 
 impl Atom {
@@ -65,9 +68,11 @@ impl Atom {
         let xyz = record.xyz.clone();
         let charge = record.charge.clone();
         let element = record.element.clone();
+        let residue_index = record.residue_index.clone(); 
+        let residue_name = record.residue_name.clone(); 
         // we will probably do some more construction at some point
 
-        Atom { xyz, charge, element }
+        Atom { xyz, charge, element, residue_index, residue_name }
     }
 
     pub fn dist(&self, other: &Atom) -> f64 {

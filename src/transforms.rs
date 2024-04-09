@@ -1,21 +1,3 @@
-/*
-
-Kinds of energies for atoms:
-
-- two body
-    - Coulomb
-    - Lennard-Jones
-
-Kinds of energies for residues:
-
-- one body
-    - depends on phi and psi angle
-        - Ramachandran energy
-- two body
-    -
-
-*/
-
 use conformation::{Atom, Pose};
 
 // calculate Lennard-Jones energy
@@ -61,4 +43,19 @@ pub fn score(pose: &Pose) -> f64 {
     // a subset of that matrix
 
     total_score
+}
+
+pub fn pdb_info(pose: &Pose) -> String {
+
+    String::from("hello")
+}
+
+pub fn featurize(pose: &Pose) -> String {
+
+    let mut count = 0;
+    for i in &pose.atoms {
+        count += 1; 
+    }
+
+    String::from(format!("PDB info\n----------\nNumber of atoms: {}\nNumber of snatoms:{}", count, count))
 }

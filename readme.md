@@ -6,7 +6,6 @@ sequences. Use Heme for fast featurization of protein structures
 for use with machine learning models 
 
 
-
 ## Features 
 
 
@@ -19,6 +18,10 @@ Heme can read FASTAs and PDB files
 
 Heme is a fast way to featurize protein structures for use with
 machine learning models 
+
+```bash
+heme featurize path/to/pdbs --output-format json --output-file dataset.json 
+```
 
 
 ### Molecular modeling 
@@ -44,13 +47,12 @@ Heme is centered around proteins, so right now
 
 ## Roadmap 
 
-- I intend to keep Heme a simple library for reading PDBs and working with
-  protein structures as I continue to learn Rust 
-- Simple molecular modeling is possible, it would be interesting to learn
-  about implementing a force field
-- I'd like to add some nice features like 
-    - get the sequence of a `Pose` object 
-    - a `Residue` object 
+- Heme 0.3.2
+- Heme 0.2.0 
+- Heme 0.1.0 
+  - basic PDB parsing 
+  - `Atom` and `Record` objects 
+  
 
 
 
