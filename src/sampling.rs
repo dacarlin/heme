@@ -1,5 +1,5 @@
-use transforms::{score, pdb_info, featurize};
-use conformation::Pose;
+use crate::transforms::{score, pdb_info, featurize};
+use crate::conformation::Pose;
 
 pub fn get_protocol(protocol_name: &str) -> Protocol {
     // this can get a protocol from a dict of protocols defined in

@@ -1,8 +1,8 @@
 // File input and output
 // WARNING: contains hand-rolled PDB parser
 
-use conformation::{XYZ, Atom, Pose};
-use sampling::get_protocol;
+use crate::conformation::{XYZ, Atom, Pose};
+use crate::sampling::get_protocol;
 
 use std::fs::File;
 use std::error::Error;

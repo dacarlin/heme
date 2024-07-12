@@ -1,9 +1,15 @@
 [package]
+edition = "2021"
 name = "heme"
 version = "0.3.2"
 authors = ["Alex Carlin <alxcarln@gmail.com>"]
 description = "PDB reader and other protein modeling tools" 
 license = "MIT"
 
+# [lib]
+# name = "heme"
+# crate-type = ["cdylib"]
+
 [dependencies]
+pyo3 = { version = "0.18.0", features = ["extension-module"] }
 fasta = "0.1.3"

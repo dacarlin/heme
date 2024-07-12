@@ -1,4 +1,4 @@
-use conformation::{Atom, Pose};
+use crate::conformation::{Atom, Pose};
 
 // calculate Lennard-Jones energy
 // from two atoms and the distance between them

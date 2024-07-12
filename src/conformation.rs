@@ -1,6 +1,6 @@
 // Conformation (smaller to larger, Atom > Residue > Pose)
 
-use io::Record;
+use crate::io::Record;
 
 #[derive(Debug)]
 pub struct XYZ {
