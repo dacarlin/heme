@@ -1,6 +1,5 @@
 use std::env;
 use std::process;
-
 use heme::io::Config;
 
 fn main() {

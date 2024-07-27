@@ -1,0 +1,25 @@
+[project]
+name = "heme"
+version = "0.1.0"
+description = "Add your description here"
+authors = [
+    { name = "Alex Carlin", email = "alxcarln@gmail.com" }
+]
+dependencies = [
+    "maturin>=1.7.0",
+]
+readme = "README.md"
+requires-python = ">= 3.8"
+
+[build-system]
+requires = ["maturin>=1.2,<2.0"]
+build-backend = "maturin"
+
+[tool.rye]
+managed = true
+dev-dependencies = []
+
+[tool.maturin]
+python-source = "python"
+module-name = "heme._lowlevel"
+features = ["pyo3/extension-module"]
