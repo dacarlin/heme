@@ -62,6 +62,8 @@ modeling, see the OpenMM or Lumol projects.)
   - `Atom` and `Record` objects 
   
 
+## Development 
 
+Heme is a hybrid Python-Rust library with bindings provided by PyO3
 
 
